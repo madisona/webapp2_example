@@ -1,0 +1,14 @@
+
+header {border-bottom:  1px solid black;}
+
+.content-wrap {}
+#content {margin-left: 15em;}
+#sidebar {float: left; width: 15em; padding:  0 5px;}
+#sidebar h1 {font-size: 1.6em; text-decoration: underline;}
+
+footer {
+
+    border-top:  1px solid black;
+    padding-top: 1em;
+    text-align: center;
+}

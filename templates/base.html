@@ -1,0 +1,47 @@
+{% spaceless %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>{% block title %}Home Before Dark{% endblock %}</title>
+        <meta name="copyright" content="Copyright (c) {% now "Y" %} Home Before Dark" />
+        <link rel="shortcut icon" href="{{ STATIC_URL }}images/favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="{{ STATIC_URL }}images/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/stylesheet.css" />
+        <style type="text/css">{% block css %}{% endblock %}</style>
+        {% block extra-head %}{% endblock %}
+    </head>
+
+    <body>
+        <div class="container">
+            <header>
+                <h1>Home Before Dark</h1>
+            </header>
+
+            <div class="content-wrap">
+                <div id="sidebar" class="column">
+                    {% block sidebar %}{% endblock %}
+                </div>
+                <div id="content" class="column">
+                    {% block content-header %}
+                      {% if messages %}
+                        {% for message in messages %}
+                          <div class="info">{{ message }}</div>
+                        {% endfor %}
+                      {% endif %}
+                    {% endblock %}
+
+                    {% block content %}{% endblock %}
+                </div>
+
+
+            </div>
+            <div class="clear_float"></div>
+            <footer>
+                &copy; {% now "Y" %} Home Before Dark
+            </footer>
+        </div>
+        {% block js %}{% endblock %}
+    </body>
+</html>
+{% endspaceless %}

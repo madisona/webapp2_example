@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block sidebar %}
+    <h1>About Us</h1>
+    <p>
+        We're a christian music group reaching out to make sure as many people as possible make it "home before dark".
+    </p>
+{% endblock %}
+
+{% block content %}
+    <img src="{{ STATIC_URL }}images/sunset_cropped.jpg" alt="sunset" />
+
+    <h2>The site is still under construction</h2>
+    <h3>If you're interested in having us play at your church or event, please contact</h3>
+    <p>John Madison<br />john.madison@homebeforedark.org</p>
+    {% comment %}
+    <h2>Upcoming Events</h2>
+    <ul>
+    {% for event in upcoming_events %}
+        <li>{{ event.start_time }} {{ event }} {{ event.description }}
+    {% endfor %}
+    </ul>
+    {% endcomment %}
+{% endblock %}
