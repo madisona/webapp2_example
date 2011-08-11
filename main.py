@@ -11,10 +11,9 @@ if lib_dir not in sys.path:
 from google.appengine.dist import use_library
 use_library('django', '1.2')
 
-
-
-
 import webapp2
+
+import config
 
 def handle_404(request, response, exception):
     logging.exception(exception)
@@ -22,21 +21,24 @@ def handle_404(request, response, exception):
     response.set_status(404)
 
 def handle_500(request, response, exception):
+    # todo: send email when not debug, include request path, error info and context, etc...
     logging.exception(exception)
-    response.write('A server error occurred!')
+    if debug:
+        from traceback import format_exc
+        response.write(format_exc(exception))
+    else:
+        response.write('A server error occurred!')
     response.set_status(500)
 
 debug = os.environ.get('SERVER_SOFTWARE', '').startswith('Dev')
-config = {
-    'STATIC_URL': '/static/',
-}
+
 
 app = webapp2.WSGIApplication([
     webapp2.Route(r'/', handler='events.handlers.Index', name='index'),
     webapp2.Route(r'/events/<event_key:[\w-]+>/', handler='events.handlers.EventDetail', name='event-detail'),
     webapp2.Route(r'/events/', handler='events.handlers.EventList', name='event-list'),
 
-], debug=debug, config=config)
+], debug=debug, config=config.options)
 app.error_handlers[404] = handle_404
 app.error_handlers[500] = handle_500
 
