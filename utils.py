@@ -8,6 +8,9 @@ from webapp2_extras import jinja2
 
 import config
 
+def is_devel():
+    return os.environ.get('SERVER_SOFTWARE', '').startswith('Dev')
+
 def jinja2_factory(app):
     j = jinja2.Jinja2(app, config.options['Jinja2'])
 
@@ -27,7 +30,7 @@ def jinja2_factory(app):
 
 def slugify(s):
     s = unicodedata.normalize('NFKD', s).encode('ascii', 'ignore')
-    return re.sub('[^a-zA-Z0-9-]+', '-', s).strip('-')
+    return re.sub('[^a-zA-Z0-9-]+', '-', s).strip('-').lower()
 
 
 def ping_googlesitemap():
