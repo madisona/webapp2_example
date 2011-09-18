@@ -1,31 +1,22 @@
 
-from google.appengine.ext.webapp import template
 
-import webapp2
-from utils import render_template
+from base_handlers import BaseHandler
 
-class TemplateHandlerMixin(object):
-    template_name = None
-
-    def render_response(self, **context):
-        return webapp2.Response(render_template(self.template_name, context))
+from events.models import Event
 
 
-class Index(TemplateHandlerMixin, webapp2.RequestHandler):
-    template_name = "index.html"
-
-    def get(self):
-        return self.render_response()
-
-class EventList(TemplateHandlerMixin, webapp2.RequestHandler):
+class EventList(BaseHandler):
     template_name = "events/event_list.html"
 
     def get(self):
-        return self.render_response(object_list={})
+        return self.render_response(self.template_name, object_list={})
 
 
-class EventDetail(TemplateHandlerMixin, webapp2.RequestHandler):
+class EventDetail(BaseHandler):
     template_name = "events/event_detail.html"
 
-    def get(self, event_key=None):
-        return self.render_response(object='something')
+    def get(self, url_path):
+        return self.render_response(self.template_name, object=self.get_object(url_path))
+
+    def get_object(self, url_path):
+        return Event.get_by_key_name(url_path)

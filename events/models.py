@@ -6,27 +6,27 @@ from utils import slugify
 import config
 
 
-def get_entity_key(event_group=None):
-    return db.Key.from_path('EventGroup', event_group or 'default_group')
-
 class Event(db.Model):
-    name = db.StringProperty(indexed=False)
+    name = db.StringProperty(indexed=False, required=True)
     location = db.StringProperty(indexed=False)
-    start_time = db.DateTimeProperty()
+    start_time = db.DateTimeProperty(required=True)
     description = db.TextProperty()
 
     def __str__(self):
         return self.name
-    
-    @classmethod
-    def get_upcoming_events(cls, event_group=None, num=5, today=datetime.datetime.today):
-        entity_key = get_entity_key(event_group)
-        return cls.all().ancestor(entity_key).filter("start_time >=", today()).order('start_time').fetch(num)
 
-    def get_url(self):
+    def __init__(self, *args, **kwargs):
+        super(Event, self).__init__(*args, **kwargs)
+        self._key_name = self.get_slug()
+
+    @classmethod
+    def get_upcoming_events(cls, num=5, today=datetime.datetime.today):
+        return cls.all().filter("start_time >=", today()).order('start_time').fetch(num)
+
+    def get_slug(self):
         date = self.start_time
-        return config.event_path_format % {
-            'slug': slugify(self.name),
+        return config.options.get('event_path_format', '') % {
+            'slug': slugify(unicode(self.name)),
             'year': date.year,
             'month': date.month,
             'day': date.day,

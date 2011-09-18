@@ -7,18 +7,17 @@
     </p>
 {% endblock %}
 
-{% block content %}
+{% block content -%}
     <img src="{{ STATIC_URL }}images/sunset_cropped.jpg" alt="sunset" />
 
     <h2>The site is still under construction</h2>
     <h3>If you're interested in having us play at your church or event, please contact</h3>
     <p>John Madison<br />john.madison@homebeforedark.org</p>
-    {% comment %}
+    
     <h2>Upcoming Events</h2>
     <ul>
-    {% for event in upcoming_events %}
+    {% for event in object_list %}
         <li>{{ event.start_time }} {{ event }} {{ event.description }}
     {% endfor %}
     </ul>
-    {% endcomment %}
-{% endblock %}
+{%- endblock %}

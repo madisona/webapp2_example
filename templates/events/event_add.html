@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Add Event</h1>
+
+    {{ form.non_field_errors() }}
+    <form action="" method="post">
+        <ul>
+            {{ form.as_ul() }}
+            <li><input type="submit" /></li>
+        </ul>
+    </form>
+{% endblock %}
