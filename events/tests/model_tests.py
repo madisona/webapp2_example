@@ -2,44 +2,17 @@
 import datetime
 import unittest
 
-from google.appengine.ext import testbed, db
+from google.appengine.ext import db
 
-import main
+from test_utils import BaseAppEngineTestCase
 
 from events import models
-
-class BaseAppEngineTestCase(unittest.TestCase):
-    
-    def setUp(self):
-        self.testbed = testbed.Testbed()
-        self.testbed.activate()
-        self.testbed.init_datastore_v3_stub()
-        self.testbed.init_user_stub()
-        self.testbed.init_memcache_stub()
-
-    def tearDown(self):
-        self.testbed.deactivate()
-
-class HandlerTests(BaseAppEngineTestCase):
-
-    def test_returns_200_on_home_page(self):
-        response = main.app.get_response('/')
-        self.assertEqual(200, response.status_int)
-
-    def test_returns_200_on_events_list_page(self):
-        response = main.app.get_response('/events/')
-        self.assertEqual(200, response.status_int)
-
-    def test_returns_200_on_events_detail_page(self):
-        response = main.app.get_response('/events/2011/08/an-event/')
-        self.assertEqual(200, response.status_int)
-
 
 class EventModelTests(BaseAppEngineTestCase):
 
     def test_get_slug_returns_model_slug(self):
         event = models.Event(name="Event 1", start_time=datetime.datetime(2011,7,31))
-        self.assertEqual('2011/7/Event-1/', event.get_slug())
+        self.assertEqual('2011/7/event-1/', event.get_slug())
 
     def test_uses_slug_as_key_name(self):
         event = models.Event(name="Event 1", start_time=datetime.datetime(2011,7,31))
