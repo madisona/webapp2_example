@@ -3,6 +3,6 @@
 {% block content %}
     <h1>Events List</h1>
     {% for object in object_list %}
-        {{ object }}
+        {{ object }} <a href='{{ uri_for("admin_event_change", url_path=object.key().name()) }}'>edit</a>
     {% endfor %}
 {% endblock %}

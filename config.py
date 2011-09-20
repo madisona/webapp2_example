@@ -7,7 +7,7 @@ PARENT_DIR = dirname(__file__)
 options = dict(
     host = 'www.homebeforedark.org',
 
-    event_path_format = "%(year)s/%(month)s/%(slug)s/",
+    event_path_format = "%(year)s/%(month)s/%(slug)s",
 
 
     Jinja2 = {

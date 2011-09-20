@@ -32,5 +32,10 @@ class AdminHandlerTests(BaseAppEngineTestCase):
         response = admin.app.get_response('/admin/event/delete/{url_path}'.format(url_path=event.get_slug()))
         self.assertEqual(200, response.status_int)
 
+class AdminListHandlerTests(BaseAppEngineTestCase):
+
+    def test_list_handler_returns_all_objects_in_list(self):
+        pass
+
 if __name__ == '__main__':
     unittest.main()
