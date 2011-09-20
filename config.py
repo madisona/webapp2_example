@@ -11,7 +11,10 @@ options = dict(
 
 
     Jinja2 = {
-        'template_path': abspath(join(PARENT_DIR, 'templates')),
+        'template_path': [
+            abspath(join(PARENT_DIR, 'templates')),
+            abspath(join(PARENT_DIR, 'events', 'templates')),
+        ],
         'environment_args': {
             'autoescape': False,
         },
