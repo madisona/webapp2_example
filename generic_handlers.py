@@ -1,9 +1,8 @@
 
-from django.core.exceptions import ImproperlyConfigured
 import webapp2
 from webapp2_extras import jinja2
 
-from utils import jinja2_factory
+from utils import jinja2_factory, intget
 
 __all__ = (
     'BaseHandler',
@@ -11,6 +10,10 @@ __all__ = (
     'FormHandler',
     'ListHandler',
 )
+
+class ImproperlyConfigured(Exception):
+    "Generic Handler is improperly configured"
+    pass
 
 class BaseHandler(webapp2.RequestHandler):
 
@@ -31,23 +34,29 @@ class SingleObjectMixin(object):
     model = None
     context_object_name = None
 
-    def get_object(self):
+    @webapp2.cached_property
+    def object(self):
         """
         by default this requires key_name to look up object
+        If id is provided in url kwargs, it MUST be an integer/long
         """
         key_name = self.kwargs.get('key_name')
+        id = self.kwargs.get('id')
 
+        obj = None
         if key_name is not None:
             obj = self.model.get_by_key_name(key_name)
-
-            if obj:
-                return obj
-            else:
-                self.abort(404, 'Requested object not found')
-
+        elif id is not None:
+            obj = self.model.get_by_id(intget(id, -1))
         else:
-            raise ImproperlyConfigured(u'Generic detail view %s must be called with '
-                                 u'a key_name.' % self.__class__.__name__)
+            raise ImproperlyConfigured(
+                u'Generic detail view %s must have a url parameter of '
+                u'either key_name or id.' % self.__class__.__name__)
+
+        if obj:
+            return obj
+        else:
+            self.abort(404, 'Requested object not found')
 
     def get_context_object_name(self, obj):
         """
@@ -55,8 +64,7 @@ class SingleObjectMixin(object):
         """
         return self.context_object_name
 
-    def get_context_data(self, **kwargs):
-        context = kwargs
+    def get_context_data(self, **context):
         context_object_name = self.get_context_object_name(self.object)
         if context_object_name:
             context[context_object_name] = self.object
