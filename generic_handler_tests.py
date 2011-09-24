@@ -9,6 +9,7 @@ from webapp2 import HTTPException
 
 __all__ = (
     'SingleObjectMixinTests',
+    'FormMixinTests',
 )
 
 class TestModel(db.Model):
@@ -93,6 +94,17 @@ class SingleObjectMixinTests(BaseAppEngineTestCase):
         context = {'first': 'thing'}
         expected_dict = dict(test_model=self.sut.object, **context)
         self.assertEqual(expected_dict, self.sut.get_context_data(**context))
+
+class FormMixinTests(BaseAppEngineTestCase):
+
+    def setUp(self):
+        super(FormMixinTests, self).setUp()
+        self.sut = generic_handlers.FormMixin()
+
+    def test_get_redirect_url_returns_redirect_url_defined(self):
+        url = '/thanks/'
+        self.sut.redirect_url = url
+        self.assertEqual(url, self.sut.get_redirect_url())
 
 if __name__ == '__main__':
     unittest.main()

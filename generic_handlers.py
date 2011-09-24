@@ -114,7 +114,7 @@ class FormMixin(object):
     redirect_url = None
 
     def get_redirect_url(self):
-        return self.redirect_url or None
+        return self.redirect_url
 
     def form_valid(self,  form):
         model = form.save()
@@ -139,7 +139,8 @@ class FormMixin(object):
     def get_initial(self):
         pass
 
-    def get_form(self):
+    @webapp2.cached_property
+    def form(self):
         return self.form_class(**self.get_form_kwargs())
 
 
@@ -172,13 +173,13 @@ class FormHandler(FormMixin, BaseHandler):
         self.kwargs = kwargs
 
         return self.render_response(self.template, **self.get_context_data(
-            form=self.get_form(),
+            form=self.form,
         ))
 
     def post(self, **kwargs):
         self.kwargs = kwargs
 
-        form = self.get_form()
+        form = self.form
         if form.is_valid():
             return self.form_valid(form)
         else:
