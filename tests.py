@@ -40,3 +40,14 @@ class SlugifyTests(TestCase):
     def test_sends_characters_to_lower_case(self):
         string = u'ABC'
         self.assertEqual('abc', utils.slugify(string))
+
+class IntGetTests(TestCase):
+
+    def test_returns_int_val_when_possible(self):
+        self.assertEqual(10, utils.intget("10"))
+
+    def test_returns_none_when_val_is_not_integer(self):
+        self.assertEqual(None, utils.intget("10.32"))
+
+    def test_returns_default_when_val_is_not_integer_and_default_given(self):
+        self.assertEqual(0, utils.intget("ABC", 0))

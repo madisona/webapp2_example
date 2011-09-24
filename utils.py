@@ -32,6 +32,11 @@ def slugify(s):
     s = unicodedata.normalize('NFKD', s).encode('ascii', 'ignore')
     return re.sub('[^a-zA-Z0-9-]+', '-', s).strip('-').lower()
 
+def intget(val, default=None):
+    try:
+        return int(val)
+    except ValueError:
+        return default
 
 def ping_googlesitemap():
     from google.appengine.api import urlfetch
