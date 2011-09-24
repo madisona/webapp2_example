@@ -12,7 +12,7 @@ class EventModelTests(BaseAppEngineTestCase):
 
     def test_get_slug_returns_model_slug(self):
         event = models.Event(name="Event 1", start_time=datetime.datetime(2011,7,31))
-        self.assertEqual('2011/7/event-1/', event.get_slug())
+        self.assertEqual('2011/7/event-1', event.get_slug())
 
     def test_uses_slug_as_key_name(self):
         event = models.Event(name="Event 1", start_time=datetime.datetime(2011,7,31))
