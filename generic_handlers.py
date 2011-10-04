@@ -114,7 +114,10 @@ class FormMixin(object):
     redirect_url = None
 
     def get_redirect_url(self):
-        return self.redirect_url
+        if self.redirect_url:
+            return self.redirect_url
+        else:
+            raise ImproperlyConfigured('No URL to redirect to, please define a redirect url.')
 
     def form_valid(self,  form):
         model = form.save()
@@ -141,8 +144,24 @@ class FormMixin(object):
 
     @webapp2.cached_property
     def form(self):
-        return self.form_class(**self.get_form_kwargs())
+        form_class = self.get_form_class()
+        return self.get_form(form_class)
 
+    def get_form(self, form_class):
+        return form_class(**self.get_form_kwargs())
+
+    def get_form_class(self):
+        return self.form_class
+
+
+class ModelFormMixin(FormMixin):
+    """
+    - Save model on form_valid
+    - Try to make a form class from model if one isn't defined
+    - add 'instance' to get_form_kwargs
+    """
+
+    pass
 
 class ListHandler(MultipleObjectMixin, BaseHandler):
     template = None

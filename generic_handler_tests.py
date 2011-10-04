@@ -106,5 +106,17 @@ class FormMixinTests(BaseAppEngineTestCase):
         self.sut.redirect_url = url
         self.assertEqual(url, self.sut.get_redirect_url())
 
+    def test_get_redirect_url_raises_improperly_configured_when_redirect_url_not_defined(self):
+        with self.assertRaises(generic_handlers.ImproperlyConfigured) as ctx:
+            self.sut.get_redirect_url()
+        self.assertEqual('No URL to redirect to, please define a redirect url.', ctx.exception.message)
+
+    def test_get_form_class_returns_form_class_on_instance(self):
+        class FormClass(object):
+            pass
+
+        self.sut.form_class = FormClass
+        self.assertEqual(FormClass, self.sut.get_form_class())
+
 if __name__ == '__main__':
     unittest.main()
